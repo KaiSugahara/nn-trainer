@@ -46,7 +46,7 @@ class Trainer(Generic[Model]):
         Xs: tuple[jax.Array, ...],
         y: jax.Array,
     ) -> float:
-        batch_loss, grads = nnx.value_and_grad(self.loss_fn)(model, Xs, y)
+        batch_loss, grads = self.value_and_grad_fn(model, Xs, y)
         self.opt_state.update(grads)
 
         return batch_loss.item()
@@ -94,6 +94,9 @@ class Trainer(Generic[Model]):
 
         # Initialize best state
         self.__best_state: nnx.graph.GraphState | None = None
+
+        # Create value_and_grad function applied JIT comlilation
+        self.value_and_grad_fn = nnx.jit(nnx.value_and_grad(self.loss_fn))
 
         # Validation
         self.__valid_and_check_early_stopping(epoch_i=0)
