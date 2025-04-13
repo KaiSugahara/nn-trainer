@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Self
 
-import torch
+import jax
 
 
 class BaseLoader(ABC):
@@ -22,10 +22,10 @@ class BaseLoader(ABC):
         """
 
     @abstractmethod
-    def __next__(self) -> tuple[tuple[torch.Tensor, ...], torch.Tensor]:
+    def __next__(self) -> tuple[tuple[jax.Array, ...], jax.Array]:
         """Returns data from the current batch
 
         Returns:
-            tuple[torch.Tensor]: Input array.
-            torch.Tensor: Target array.
+            tuple[jax.Array]: Input array.
+            jax.Array: Target array.
         """
