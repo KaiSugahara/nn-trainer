@@ -10,8 +10,8 @@ from tqdm import tqdm
 
 from nn_trainer.core.exceptions import NotFittedError, NotSetEvaluatorError
 from nn_trainer.core.logger import Logger
-from nn_trainer.jax.evaluator.base_evaluator import BaseEvaluator
-from nn_trainer.jax.loader import BaseLoader
+from nn_trainer.flax.evaluator.base_evaluator import BaseEvaluator
+from nn_trainer.flax.loader import BaseLoader
 
 Model = TypeVar("Model", bound=nnx.Module)
 

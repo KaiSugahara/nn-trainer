@@ -5,7 +5,7 @@ import jax
 import numpy as np
 import polars as pl
 
-from nn_trainer.jax.loader import BaseLoader
+from nn_trainer.flax.loader import BaseLoader
 
 
 class MiniBatchLoader(BaseLoader):

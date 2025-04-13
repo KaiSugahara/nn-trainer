@@ -2,8 +2,8 @@ import jax
 import polars as pl
 from flax import nnx
 
-from nn_trainer.jax.evaluator import BaseEvaluator
-from nn_trainer.jax.loss_fn import mean_squared_error
+from nn_trainer.flax.evaluator import BaseEvaluator
+from nn_trainer.flax.loss_fn import mean_squared_error
 
 
 class MeanSquaredErrorEvaluator(BaseEvaluator):
