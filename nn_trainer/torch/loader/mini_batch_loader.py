@@ -1,13 +1,11 @@
 import math
 from typing import Self
 
-import jax
 import numpy as np
 import polars as pl
 import torch
 
-from nn_trainer.core.loader import BaseLoader
-from nn_trainer.core.types import Array, ArrayType
+from nn_trainer.torch.loader import BaseLoader
 
 
 class MiniBatchLoader(BaseLoader):
@@ -16,7 +14,6 @@ class MiniBatchLoader(BaseLoader):
         X_df: pl.DataFrame,
         y_df: pl.DataFrame,
         batch_size: int,
-        array_type: ArrayType,
         seed: int,
     ):
         # Construct Generator
@@ -32,7 +29,6 @@ class MiniBatchLoader(BaseLoader):
         self.X_df = X_df
         self.y_df = y_df
         self.batch_size = batch_size
-        self.array_type = array_type
         self.rng = rng
         self.data_size = data_size
         self.batch_num = batch_num
@@ -46,16 +42,8 @@ class MiniBatchLoader(BaseLoader):
         y = self.y_df[shuffled_indices, :].to_numpy().copy()
 
         # Create Array
-        self.X: Array
-        self.y: Array
-        if self.array_type == "torch":
-            self.X = torch.from_numpy(X)
-            self.y = torch.from_numpy(y)
-        elif self.array_type == "jax":
-            self.X = jax.device_put(X)
-            self.y = jax.device_put(y)
-        else:
-            NotImplementedError("Unsupported array_type is specified.")
+        self.X = torch.from_numpy(X)
+        self.y = torch.from_numpy(y)
 
         return self
 
@@ -76,12 +64,12 @@ class MiniBatchLoader(BaseLoader):
 
         return self.batch_num
 
-    def __next__(self) -> tuple[tuple[Array, ...], Array]:
+    def __next__(self) -> tuple[tuple[torch.Tensor, ...], torch.Tensor]:
         """Returns data from the current batch
 
         Returns:
-            tuple[Array]: The input data.
-            Array: The target data.
+            tuple[torch.Tensor]: Input array.
+            torch.Tensor: Target array.
         """
 
         if self.batch_index >= self.batch_num:

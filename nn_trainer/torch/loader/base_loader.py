@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Self
 
+import torch
+
 
 class BaseLoader(ABC):
     @abstractmethod
@@ -17,4 +19,13 @@ class BaseLoader(ABC):
 
         Returns:
             int: The number of batches
+        """
+
+    @abstractmethod
+    def __next__(self) -> tuple[tuple[torch.Tensor, ...], torch.Tensor]:
+        """Returns data from the current batch
+
+        Returns:
+            tuple[torch.Tensor]: Input array.
+            torch.Tensor: Target array.
         """
