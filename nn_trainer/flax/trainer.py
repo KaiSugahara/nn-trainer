@@ -47,7 +47,7 @@ class Trainer(Generic[Model]):
         y: jax.Array,
     ) -> float:
         batch_loss, grads = self.value_and_grad_fn(model, Xs, y)
-        self.opt_state.update(grads)
+        self.opt_state.update(model, grads)
 
         return batch_loss.item()
 
@@ -90,7 +90,7 @@ class Trainer(Generic[Model]):
         self.logger = Logger(active_run=self.active_run)
 
         # Initialize optimizer
-        self.opt_state = nnx.Optimizer(model=self.model, tx=self.optimizer)
+        self.opt_state = nnx.Optimizer(model=self.model, tx=self.optimizer, wrt=nnx.Param)
 
         # Initialize best state
         self.__best_state: nnx.graph.GraphState | None = None
